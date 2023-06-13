@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-
+import django_heroku
+import dj_database_url
 import pymysql
 pymysql.install_as_MySQLdb()
 
@@ -182,6 +183,8 @@ CSP_DEFAULT_SRC = ("self", "http://127.0.0.1:8000")
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+django-heroku.settings(locals))
 
 # # If you need a custom directive, add it like this:
 # CSP_DIRECTIVES = {
