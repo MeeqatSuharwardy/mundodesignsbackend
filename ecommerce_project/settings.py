@@ -95,28 +95,28 @@ WSGI_APPLICATION = "ecommerce_project.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'u391724880_mundo',
-        'USER': 'u391724880_meeqat',
-        'PASSWORD': '282Sikander*',
-        'HOST': 'srv980.hstgr.io',
-        'PORT': '3306',
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'sql_mode': 'traditional',
-            'read_default_file': '<path_to_your_mysql_config_file>'
-        },
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'u391724880_mundo',
+#         'USER': 'u391724880_meeqat',
+#         'PASSWORD': '282Sikander*',
+#         'HOST': 'srv980.hstgr.io',
+#         'PORT': '3306',
+#         'OPTIONS': {
+#             'charset': 'utf8mb4',
+#             'sql_mode': 'traditional',
+#             'read_default_file': '<path_to_your_mysql_config_file>'
+#         },
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
