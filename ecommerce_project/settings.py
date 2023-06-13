@@ -32,7 +32,7 @@ STRIPE_PUBLIC_KEY = 'pk_test_51KXl9UIoh9wBG93PNs13od1aDk8nH0e7ix9d3qT8vA8Y6jbLCl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['mundo.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['https://mundo.herokuapp.com/', '127.0.0.1']
 
 # Application definition
 

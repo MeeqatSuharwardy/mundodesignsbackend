@@ -1,4 +1,3 @@
-web: gunicorn ecommerce_project.wsgi -log-file- --log-level debug
-python manage.py collectstatic --noinput
-heroku ps:scale web=1
-manage.py migrate
+web: gunicorn ecommerce_project.wsgi -log-file-
+heroku run python manage.py migrate
+heroku run python manage.py collectstatic --noinput
