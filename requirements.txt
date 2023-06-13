@@ -10,6 +10,10 @@ decouple==0.0.7
 
 Django==4.2.1
 
+django-heroku
+
+dj-database-url
+
 django-cors-headers
 
 djangorestframework==3.14.0
