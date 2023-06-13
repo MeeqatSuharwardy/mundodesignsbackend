@@ -184,7 +184,7 @@ CSP_DEFAULT_SRC = ("self", "http://127.0.0.1:8000")
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-django-heroku.settings(locals))
+django_heroku.settings(locals())
 
 # # If you need a custom directive, add it like this:
 # CSP_DIRECTIVES = {
