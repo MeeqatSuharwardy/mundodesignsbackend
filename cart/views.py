@@ -1,28 +1,55 @@
-from django.shortcuts import render
-
-# Create your views here.
-from rest_framework import generics
-from .models import Cart
-from .serializers import CartSerializer
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
-from .models import Product
+from django.views.decorators.csrf import csrf_exempt
+from .models import Cart
+from .serializers import CartSerializer
+from products.models import Product
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
 
 class CartListCreateView(generics.ListCreateAPIView):
-    queryset = Cart.objects.all()
     serializer_class = CartSerializer
+    permission_classes = [AllowAny]
 
+    def get_queryset(self):
+        session_key = self.request.session.session_key
+        return Cart.objects.filter(session_key=session_key)
+
+    def perform_create(self, serializer):
+        session_key = self.request.session.session_key
+        serializer.save(session_key=session_key)
+
+    def get_total_price(self):
+        queryset = self.get_queryset()
+        total_price = sum(item.product.price * item.quantity for item in queryset)
+        return total_price
 
 class CartRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Cart.objects.all()
     serializer_class = CartSerializer
+    permission_classes = [AllowAny]
 
+    def get_queryset(self):
+        session_key = self.request.session.session_key
+        return Cart.objects.filter(session_key=session_key)
 
+@csrf_exempt
 def add_to_cart(request, product_id, quantity):
     product = get_object_or_404(Product, id=product_id)
 
-    # Create the cart item
-    cart_item = Cart(product=product, quantity=quantity)
-    cart_item.save()
+    session_key = request.session.session_key
+    if not session_key:
+        request.session.create()
+        session_key = request.session.session_key
 
-    return JsonResponse({'message': 'Product added to cart.'})
+    cart_item, created = Cart.objects.get_or_create(
+        session_key=session_key,
+        product=product,
+        defaults={'quantity': quantity}
+    )
+
+    if not created:
+        cart_item.quantity += quantity
+        cart_item.save()
+
+    serializer = CartSerializer(cart_item)
+    return JsonResponse(serializer.data, safe=False)
