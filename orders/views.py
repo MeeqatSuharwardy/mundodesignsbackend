@@ -12,11 +12,11 @@ class OrderListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         order = serializer.save()
-        order_items = self.request.data.get('order_items', [])  # Assuming order_items is sent in the request data
-        for item in order_items:
-            product_name = item.get('product_name')
-            product_image = item.get('product_image')
-            quantity = item.get('quantity')
+        order_items_data = self.request.data.get('order_items', [])
+        for item_data in order_items_data:
+            product_name = item_data.get('product_name')
+            product_image = item_data.get('product_image')
+            quantity = item_data.get('quantity')
             product = Product.objects.create(name=product_name, image=product_image)
             OrderItem.objects.create(order=order, product=product, quantity=quantity)
 
