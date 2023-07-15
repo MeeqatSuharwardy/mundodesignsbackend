@@ -4,6 +4,7 @@ from rest_framework import generics
 from .models import Order, OrderItem
 from .serializers import OrderSerializer, OrderItemSerializer
 from products.models import Product
+from django.template.loader import render_to_string
 
 class OrderListCreateView(generics.ListCreateAPIView):
     queryset = Order.objects.all()
@@ -15,22 +16,22 @@ class OrderListCreateView(generics.ListCreateAPIView):
         for item in order_items:
             name = item.get('name')
             image = item.get('image')
-            text = item.get('text')
             quantity = item.get('quantity')
-            product = Product.objects.create(name=name, image=image, text=text)  # Create a new product or find an existing one based on your logic
-            OrderItem.objects.create(order=order, product=product, quantity=quantity)
+            product = Product.objects.create(name=name, image=image)
+            OrderItem.objects.create(order=order, product=product, quantity=quantity, name=name, image=image)
 
         # Send email receipt
-        # You can use a library like Django's built-in send_mail or a third-party library like Django Mailer or SendGrid
-        # Example using Django's send_mail:
         from django.core.mail import send_mail
 
         subject = 'Order Receipt'
-        message = f'Thank you for your order! Your order ID is {order.id}.'
+        context = {'order': order}
+        message = render_to_string('email_receipt.html', context)
         from_email = 'meeqatsuharward@gmail.com'
         recipient_list = [order.email]
 
         send_mail(subject, message, from_email, recipient_list)
+
+
 
 class OrderRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Order.objects.all()

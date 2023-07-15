@@ -18,6 +18,8 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+    name = models.CharField(max_length=100)
+    image = models.CharField(max_length=200)
 
     def __str__(self):
         return f'{self.order} - {self.product.name}'
