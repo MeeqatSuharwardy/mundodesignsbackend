@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 from rest_framework import generics
 from .models import Order, OrderItem
 from .serializers import OrderSerializer, OrderItemSerializer
@@ -30,8 +29,6 @@ class OrderListCreateView(generics.ListCreateAPIView):
         recipient_list = [order.email]
 
         send_mail(subject, message, from_email, recipient_list)
-
-
 
 class OrderRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Order.objects.all()
