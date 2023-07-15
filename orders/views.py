@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 from rest_framework import generics
 from .models import Order, OrderItem
 from .serializers import OrderSerializer, OrderItemSerializer
@@ -14,11 +13,10 @@ class OrderListCreateView(generics.ListCreateAPIView):
         order = serializer.save()
         order_items = self.request.data.get('order_items', [])  # Assuming order_items is sent in the request data
         for item in order_items:
-            name = item.get('name')
-            image = item.get('image')
+            product_data = item.get('product')
             quantity = item.get('quantity')
-            product = Product.objects.create(name=name, image=image)
-            OrderItem.objects.create(order=order, product=product, quantity=quantity, name=name, image=image)
+            product = Product.objects.create(**product_data)
+            OrderItem.objects.create(order=order, product=product, quantity=quantity)
 
         # Send email receipt
         from django.core.mail import send_mail
@@ -30,7 +28,6 @@ class OrderListCreateView(generics.ListCreateAPIView):
         recipient_list = [order.email]
 
         send_mail(subject, message, from_email, recipient_list)
-
 
 
 class OrderRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
