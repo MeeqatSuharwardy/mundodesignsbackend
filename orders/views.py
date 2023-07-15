@@ -14,10 +14,8 @@ class OrderListCreateView(generics.ListCreateAPIView):
         order = serializer.save()
         order_items_data = self.request.data.get('order_items', [])
         for item_data in order_items_data:
-            product_name = item_data.get('product_name')
-            product_image = item_data.get('product_image')
+            product = item_data.get('product')
             quantity = item_data.get('quantity')
-            product = Product.objects.create(name=product_name, image=product_image)
             OrderItem.objects.create(order=order, product=product, quantity=quantity)
 
         # Send email receipt
@@ -30,6 +28,7 @@ class OrderListCreateView(generics.ListCreateAPIView):
         recipient_list = [order.email]
 
         send_mail(subject, message, from_email, recipient_list)
+
 
 class OrderRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Order.objects.all()
