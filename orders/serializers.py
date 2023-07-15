@@ -12,7 +12,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         fields = ['product_name', 'product_image', 'quantity']
 
 class OrderSerializer(serializers.ModelSerializer):
-    order_items = OrderItemSerializer(many=True, source='orderitem_set.all')
+    order_items = OrderItemSerializer(many=True, read_only=True)
 
     class Meta:
         model = Order
@@ -29,6 +29,7 @@ class OrderSerializer(serializers.ModelSerializer):
             OrderItem.objects.create(order=order, product=product, **item_data)
 
         return order
+
 
 
 
