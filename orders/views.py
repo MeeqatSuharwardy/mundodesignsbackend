@@ -1,8 +1,4 @@
 from django.shortcuts import render
-from rest_framework import generics
-from .models import Order, OrderItem
-from .serializers import OrderSerializer, OrderItemSerializer
-from products.models import Product
 
 from rest_framework import generics
 from .models import Order, OrderItem
