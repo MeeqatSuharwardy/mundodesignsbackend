@@ -1,3 +1,4 @@
+# views.py
 from django.shortcuts import render
 from rest_framework import generics
 from .models import Order, OrderItem
@@ -13,9 +14,10 @@ class OrderListCreateView(generics.ListCreateAPIView):
         order = serializer.save()
         order_items = self.request.data.get('order_items', [])  # Assuming order_items is sent in the request data
         for item in order_items:
-            product_data = item.get('product')
+            product_name = item.get('product_name')
+            product_image = item.get('product_image')
             quantity = item.get('quantity')
-            product = Product.objects.create(**product_data)
+            product = Product.objects.create(name=product_name, image=product_image)
             OrderItem.objects.create(order=order, product=product, quantity=quantity)
 
         # Send email receipt
@@ -28,7 +30,6 @@ class OrderListCreateView(generics.ListCreateAPIView):
         recipient_list = [order.email]
 
         send_mail(subject, message, from_email, recipient_list)
-
 
 class OrderRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Order.objects.all()
