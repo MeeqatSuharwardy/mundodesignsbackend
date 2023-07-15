@@ -10,6 +10,7 @@ class Order(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     is_successful = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    products = models.ManyToManyField(Product, through='OrderItem')
 
     def __str__(self):
         return f'{self.fullName} - {self.id}'
@@ -18,8 +19,6 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
-    name = models.CharField(max_length=100)
-    image = models.CharField(max_length=200)
 
     def __str__(self):
         return f'{self.order} - {self.product.name}'
