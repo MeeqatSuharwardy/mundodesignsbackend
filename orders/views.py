@@ -14,8 +14,9 @@ class OrderListCreateView(generics.ListCreateAPIView):
         order = serializer.save()
         order_items_data = self.request.data.get('order_items', [])
         for item_data in order_items_data:
-            product = item_data.get('product')
+            product_id = item_data.get('product')
             quantity = item_data.get('quantity')
+            product = Product.objects.get(id=product_id)
             OrderItem.objects.create(order=order, product=product, quantity=quantity)
 
         # Send email receipt

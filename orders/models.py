@@ -1,6 +1,7 @@
 from django.db import models
 from products.models import Product
 
+
 class Order(models.Model):
     fullName = models.CharField(max_length=100)
     address = models.CharField(max_length=200)
@@ -13,6 +14,7 @@ class Order(models.Model):
 
     def __str__(self):
         return f'{self.fullName} - {self.id}'
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
