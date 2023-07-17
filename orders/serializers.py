@@ -1,19 +1,14 @@
-# serializers.py
 from rest_framework import serializers
-from .models import Order, OrderItem
-from products.serializers import ProductSerializer
+from .models import Order, Product
 
-class OrderItemSerializer(serializers.ModelSerializer):
-    product = ProductSerializer(read_only=True)
-
+class ProductSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OrderItem
-        fields = ['product', 'quantity']
+        model = Product
+        fields = '__all__'
 
 class OrderSerializer(serializers.ModelSerializer):
-    order_items = OrderItemSerializer(many=True, read_only=True)
+    products = ProductSerializer(many=True, read_only=True)
 
     class Meta:
         model = Order
-        fields = ['id', 'fullName', 'address', 'email', 'phoneNumber', 'postcode', 'total_price', 'is_successful', 'created_at', 'order_items']
-        read_only_fields = ['id', 'is_successful', 'created_at']
+        fields = '__all__'
