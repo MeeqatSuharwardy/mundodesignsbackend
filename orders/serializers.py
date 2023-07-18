@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Order, OrderItem
+from .models import Order, OrderItem, Product
+import json
 
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,8 +15,10 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ['id', 'fullName', 'session_id', 'address', 'postcode', 'email', 'phoneNumber', 'total_price', 'is_successful', 'created_at', 'items']
 
     def create(self, validated_data):
-        items_data = validated_data.pop('items')
+        items_data = json.loads(validated_data.pop('items'))
         order = Order.objects.create(**validated_data)
         for item_data in items_data:
-            OrderItem.objects.create(order=order, **item_data)
+            product_data = item_data.pop('product')
+            product = Product.objects.create(**product_data)
+            OrderItem.objects.create(order=order, product=product, **item_data)
         return order
