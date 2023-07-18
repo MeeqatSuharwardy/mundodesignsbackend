@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Order Form</h1>
+    <form id="orderForm" method="POST">
+        {% csrf_token %}
+        <label for="fullName">Full Name:</label>
+        <input type="text" name="fullName" id="fullName" required><br><br>
+
+        <label for="address">Address:</label>
+        <input type="text" name="address" id="address" required><br><br>
+
+        <label for="postcode">Postcode:</label>
+        <input type="text" name="postcode" id="postcode" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" required><br><br>
+
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="text" name="phoneNumber" id="phoneNumber" required><br><br>
+
+        <h3>Order Items:</h3>
+        <div id="orderItemsContainer"></div>
+        <button type="button" id="addItemButton">Add Item</button><br><br>
+
+        <label for="totalPrice">Total Price:</label>
+        <input type="text" name="totalPrice" id="totalPrice" required><br><br>
+
+        <input type="submit" value="Place Order">
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            let itemCount = 1;
+
+            function createItemField(itemId) {
+                const itemField = `
+                    <div id="item-${itemId}">
+                        <label for="product-${itemId}">Product:</label>
+                        <input type="text" name="product-${itemId}" id="product-${itemId}" required>
+
+                        <label for="quantity-${itemId}">Quantity:</label>
+                        <input type="number" name="quantity-${itemId}" id="quantity-${itemId}" required min="1">
+
+                        <button type="button" class="removeItemButton" data-item-id="${itemId}">Remove Item</button>
+                        <br><br>
+                    </div>
+                `;
+                return itemField;
+            }
+
+            $('#addItemButton').click(function() {
+                const newItemField = createItemField(itemCount);
+                $('#orderItemsContainer').append(newItemField);
+                itemCount++;
+            });
+
+            $('#orderItemsContainer').on('click', '.removeItemButton', function() {
+                const itemId = $(this).data('item-id');
+                $(`#item-${itemId}`).remove();
+            });
+        });
+    </script>
+</body>
+</html>

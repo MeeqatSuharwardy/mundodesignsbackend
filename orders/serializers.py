@@ -1,24 +1,21 @@
 from rest_framework import serializers
-from .models import Order, Product
+from .models import Order, OrderItem
 
-class ProductSerializer(serializers.ModelSerializer):
+class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Product
-        fields = '__all__'
+        model = OrderItem
+        fields = ['product', 'quantity']
 
 class OrderSerializer(serializers.ModelSerializer):
-    products = ProductSerializer(many=True, read_only=True)
+    items = OrderItemSerializer(many=True)
 
     class Meta:
         model = Order
-        fields = '__all__'
-        extra_kwargs = {
-            'email': {'write_only': True}  # Ensure the email field is write-only
-        }
+        fields = ['id', 'fullName', 'session_id', 'address', 'postcode', 'email', 'phoneNumber', 'total_price', 'is_successful', 'created_at', 'items']
 
     def create(self, validated_data):
-        products_data = validated_data.pop('products', [])
+        items_data = validated_data.pop('items')
         order = Order.objects.create(**validated_data)
-        for product_data in products_data:
-            Product.objects.create(order=order, **product_data)
+        for item_data in items_data:
+            OrderItem.objects.create(order=order, **item_data)
         return order
