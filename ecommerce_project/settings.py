@@ -31,7 +31,7 @@ STRIPE_SECRET_KEY = 'sk_test_51KXl9UIoh9wBG93PnZjFOAd1HJdVk2Lt02Sn55kWtCZG6w0V19
 STRIPE_PUBLIC_KEY = 'pk_test_51KXl9UIoh9wBG93PNs13od1aDk8nH0e7ix9d3qT8vA8Y6jbLClswniE4e5adtpIKIM126rdote9FOKxDZ4nHxhoE00EBWY6oFG'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['https://mundo.herokuapp.com/', '127.0.0.1']
 
