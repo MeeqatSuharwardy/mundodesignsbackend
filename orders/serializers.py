@@ -4,15 +4,14 @@ from .models import Order, OrderItem
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
-        fields = ['product_id', 'quantity', 'price', 'product_name']
-
+        fields = ['product_name', 'quantity', 'price']
 
 class OrderSerializer(serializers.ModelSerializer):
-    items = OrderItemSerializer(many=True)  # Use OrderItemSerializer to serialize the items
+    items = OrderItemSerializer(many=True)
 
     class Meta:
         model = Order
-        fields = ['id', 'fullName',  'address', 'postcode', 'email', 'phoneNumber', 'total_price',
+        fields = ['id', 'fullName', 'address', 'postcode', 'email', 'phoneNumber', 'total_price',
                   'is_successful', 'created_at', 'items']
 
     def create(self, validated_data):
