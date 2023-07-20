@@ -6,12 +6,13 @@ class OrderItemSerializer(serializers.ModelSerializer):
         model = OrderItem
         fields = ['product_name', 'quantity']
 
+
 class OrderSerializer(serializers.ModelSerializer):
     items = OrderItemSerializer(many=True)  # Use OrderItemSerializer to serialize the items
 
     class Meta:
         model = Order
-        fields = ['id', 'fullName', 'session_id', 'address', 'postcode', 'email', 'phoneNumber', 'total_price',
+        fields = ['id', 'fullName', 'address', 'postcode', 'email', 'phoneNumber', 'total_price',
                   'is_successful', 'created_at', 'items']
 
     def create(self, validated_data):
