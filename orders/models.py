@@ -1,6 +1,6 @@
 from django.db import models
 
-class Order(models.Model):
+class Order(models.Model):  # Use the class name 'Order'
     fullName = models.CharField(max_length=100)
     address = models.CharField(max_length=200)
     postcode = models.CharField(max_length=10)
@@ -10,8 +10,7 @@ class Order(models.Model):
     is_successful = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
-class OrderItem(models.Model):
-    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
+    # Fields for Order Items
     product_name = models.CharField(max_length=100)
     quantity = models.IntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)

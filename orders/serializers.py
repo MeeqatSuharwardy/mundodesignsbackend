@@ -1,22 +1,17 @@
 from rest_framework import serializers
-from .models import Order, OrderItem
-
-class OrderItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OrderItem
-        fields = ['product_name', 'quantity', 'price']
+from .models import Order
 
 class OrderSerializer(serializers.ModelSerializer):
-    items = OrderItemSerializer(many=True)
+    items = serializers.ListField(child=serializers.DictField(), write_only=True)
 
     class Meta:
-        model = Order
+        model = Order  # Use Order model
         fields = ['id', 'fullName', 'address', 'postcode', 'email', 'phoneNumber', 'total_price',
                   'is_successful', 'created_at', 'items']
 
     def create(self, validated_data):
         items_data = validated_data.pop('items')
-        order = Order.objects.create(**validated_data)
+        order = Order.objects.create(**validated_data)  # Use Order model
         for item_data in items_data:
-            OrderItem.objects.create(order=order, **item_data)
+            OrdersItem.objects.create(order=order, **item_data)  # Use OrdersItem model
         return order
