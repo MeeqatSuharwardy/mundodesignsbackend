@@ -1,10 +1,14 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
+from django.middleware.csrf import get_token
+from django.views.decorators.csrf import csrf_exempt
 from .models import Order
 from .serializers import OrderSerializer
 from django.core.mail import send_mail
 from django.http import JsonResponse
 import stripe
+import json
+
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
@@ -42,11 +46,18 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         return super().update(request, *args, **kwargs)
 
+@csrf_exempt
 def create_payment_intent(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        # For GET requests, return the CSRF token in the response
+        csrf_token = get_token(request)
+        return JsonResponse({'csrfToken': csrf_token})
+
+    elif request.method == 'POST':
         try:
             # Retrieve the total price from the request data
-            total_price = request.POST.get('total_price', None)
+            data = json.loads(request.body)
+            total_price = data.get('total_price', None)
             if not total_price:
                 return JsonResponse({'error': 'Total price is missing.'}, status=400)
 
@@ -54,16 +65,16 @@ def create_payment_intent(request):
             total_price_cents = int(float(total_price) * 100)
 
             # Replace 'sk_test_your_secret_key' with your Stripe secret key
-            stripe.api_key = 'sk_test_your_secret_key'
+            stripe.api_key = 'sk_test_51KXl9UIoh9wBG93PnZjFOAd1HJdVk2Lt02Sn55kWtCZG6w0V19csWl6T0LE02yFZdtaaUPSTEd21TBi5qO09LMWE00kMH9OnzU'  # Replace with your Stripe secret key
 
             # Create a PaymentIntent
             intent = stripe.PaymentIntent.create(
                 amount=total_price_cents,
-                currency='usd',  # Replace with your desired currency code
+                currency='gbp',  # Set currency to GBP for UK pounds
             )
 
-            return JsonResponse({'clientSecret': intent.client_secret})
+            return JsonResponse({'clientSecret': intent.client_secret, 'totalPriceChargedGBP': total_price})
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
 
-    return JsonResponse({'error': 'Invalid request method.'}, status=405)
+    return JsonResponse({'error': 'Invalid request method. Use GET or POST.'}, status=405)

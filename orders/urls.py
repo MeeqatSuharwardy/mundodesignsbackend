@@ -6,5 +6,5 @@ router = DefaultRouter()
 router.register(r'orders', OrderViewSet, basename='order')  # Use OrderViewSet
 
 urlpatterns = [
-    path('create_payment_intent/', create_payment_intent, name='create_payment_intent'),
+    path('create_payment/', create_payment_intent, name='create_payment'),
 ] + router.urls
